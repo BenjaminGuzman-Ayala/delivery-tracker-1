@@ -1,0 +1,88 @@
+<div>
+  <div>
+    <h1>Delivery Tracker</h1>
+  </div>
+</div>
+<p>Know if something gets lost in the mail.</p>
+<hr>
+
+<div>
+  <div>
+    <h2>
+      Expecting a package?
+    </h2>
+
+    <form action="/insert_delivery" method="post">
+
+       <div>
+        <label for="description_box">
+          Description
+        </label>
+
+        <input type="text" id="description_box" name="query_description">
+      </div>
+      
+      <div>
+        <label for="supposed_to_arrive_on_box">
+          Supposed to arrive on
+        </label>
+
+        <input type="date" id="supposed_to_arrive_on_box" name="query_date">
+      </div>
+      <div>
+        <label for="details">
+          Details
+        </label>
+
+        <textarea id="details" name="query_details"></textarea>
+      </div>
+
+      <div>
+        <label for="user_id_box">
+        </label>
+
+        <input type="hidden" id="user_id_box" name="query_user_id">
+      </div>
+
+      <button>
+      Log delivery
+      </button>
+    </form>
+  </div>
+</div>
+
+<hr>
+<div class="waiting_on">
+  <h2>Waiting On</h2>
+      <% @list_of_deliveries.each do |a_delivery| %>
+      <% if a_delivery.is_received == false%>
+        <ul>
+          <li>
+              <%= a_delivery.description %>
+              <p>Supposed to arrive on <%= a_delivery.arrival %></p>
+              
+              <form action="/modify_received/<%= a_delivery.id %>" method="post">
+              <input type="hidden">
+
+              <button>Mark as received</button>
+              </form>
+          </li>
+          <% end%>
+        </ul>
+      <% end %>
+</div>
+
+<div class="received">
+  <h2>Received</h2>
+      <% @list_of_deliveries.each do |a_delivery| %>
+      <% if a_delivery.is_received == true%>
+        <ul>
+          <li>
+              <%= a_delivery.description %>
+              <p>Updated <%= time_ago_in_words(a_delivery.created_at)%> ago<a href="/delete_delivery/<%=a_delivery.id %>">Delete</a></p>
+          <% end%>
+        </ul>
+      <% end %>
+</div>
+
+<hr>
